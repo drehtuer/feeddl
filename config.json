@@ -1,0 +1,23 @@
+{
+  "data": ".local/share/feeddl/",
+  "download": "podcast",
+  "date-filename": "%Y%m%d",
+  "date-tag": "%Y-%m-%d %H:%M:%S",
+  "notify": "notify-send",
+  "feeds": [
+    {
+      "name": "name (key) of the podcast",
+      "url": "RSS URL",
+      "download": "download subfolder",
+      "filename": "%date-filename% %title%%filename_ext%",
+      "tag": {
+        "title": "%title%",
+        "artist": "%author%",
+        "album": "%title%",
+        "comment": "%summary%",
+        "date": "%date-tag%",
+        "genre": "podcast"
+      }
+    }
+  ]
+}
