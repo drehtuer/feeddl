@@ -42,13 +42,16 @@ class FeedDl:
         downloader = Downloader.Downloader(self._config)
         for dl in self._config['feeds']:
             print('Checking \'{}\''.format(dl['name']))
-            feed = Feed.Feed(dl['url'])
-            newEntries = downloadFilter.filterNew(dl['name'], feed.entries())
-            print('\tNew entries: {}/{}'.format(len(newEntries), len(feed.entries())))
+            try:
+                feed = Feed.Feed(dl['url'])
+                newEntries = downloadFilter.filterNew(dl['name'], feed.entries())
+                print('\tNew entries: {}/{}'.format(len(newEntries), len(feed.entries())))
 
-            for entry in newEntries:
-                if downloader.download(dl, entry, args.dryrun):
-                    downloadFilter.update(dl['name'], entry)
+                for entry in newEntries:
+                    if downloader.download(dl, entry, args.dryrun):
+                        downloadFilter.update(dl['name'], entry)
+            except Exception as e:
+                print(e)
 
 
     def feeds(self, args):

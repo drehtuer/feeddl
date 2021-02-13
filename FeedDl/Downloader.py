@@ -90,7 +90,8 @@ class Downloader:
                             if filename_ext.endswith('mp3'):
                                 self._writeTags(feed, absolute_filename, formaters)
                             if 'notify' in self._config and self._config['notify']:
-                                subprocess.run([self._config['notify'], 'Downloaded new eposode \'{}\''.format(absolute_filename)])
+                                subprocess.run([self._config['notify'],
+                                    'Downloaded new episode \'{}\''.format(absolute_filename)])
                         except Exception as e:
                             result = False
                             print(e)
