@@ -42,14 +42,17 @@ class FeedDl:
         downloader = Downloader.Downloader(self._config)
         for dl in self._config['feeds']:
             print('Checking \'{}\''.format(dl['name']))
-            feed = Feed.Feed(dl['url'])
-            newEntries = downloadFilter.filterNew(dl['name'], feed.entries())
-            print('\tNew entries: {}/{}'.format(len(newEntries), len(feed.entries())))
+            try:
+                feed = Feed.Feed(dl['url'])
+                newEntries = downloadFilter.filterNew(dl['name'], feed.entries())
+                print('\tNew entries: {}/{}'.format(len(newEntries), len(feed.entries())))
 
-            for entry in newEntries:
-                if downloader.download(dl, entry, args.dryrun):
-                    downloadFilter.update(dl['name'], entry)
-
+                for entry in newEntries:
+                    if downloader.download(dl, entry, args.dryrun):
+                        downloadFilter.update(dl['name'], entry)
+            except Exception as e:
+                print('\t{}'.format(e),
+                        file = sys.stderr)
 
     def feeds(self, args):
         for feed in self._config['feeds']:
@@ -79,17 +82,20 @@ class FeedDl:
             stderr('No feed named \'{}\''.format(args.name))
             sys.exit(1)
 
-        feed = Feed.Feed(url)
-        header = feed.header()
-        stdout('Feed: \'{}\''.format(header['title']))
-        if 'link' in header:
-            stdout('Link: {}'.format(header['link']))
-        stdout('Updated: {}'.format(feed.updated()))
-        stdout
-        stdout('Episodes:')
-        for entry in feed.entries():
-            stdout('\tTitle: \'{}\''.format(entry['title']))
-            if 'published' in entry:
-                stdout('\t\tPublished: {}'.format(feed.parseDate(entry['published_parsed'])))
-            if 'subtitle' in entry:
-                stdout('\t\tSubtitle: {}'.format(entry['subtitle']))
+        try:
+            feed = Feed.Feed(url)
+            header = feed.header()
+            stdout('Feed: \'{}\''.format(header['title']))
+            if 'link' in header:
+                stdout('Link: {}'.format(header['link']))
+            stdout('Updated: {}'.format(feed.updated()))
+            stdout('Episodes:')
+            for entry in feed.entries():
+                stdout('\tTitle: \'{}\''.format(entry['title']))
+                if 'published' in entry:
+                    stdout('\t\tPublished: {}'.format(feed.parseDate(entry['published_parsed'])))
+                if 'subtitle' in entry:
+                    stdout('\t\tSubtitle: {}'.format(entry['subtitle']))
+        except Exception as e:
+            print('\t{}'.format(e),
+                    file = sys.stderr)

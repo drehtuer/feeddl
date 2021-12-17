@@ -2,10 +2,10 @@ from __future__ import print_function
 from datetime import datetime
 import feedparser
 import json
+import sys
 
 
 IGNORE_BOZO_EXCEPTIONS = [
-    feedparser.exceptions.CharacterEncodingOverride,
 ]
 
 class Feed:
